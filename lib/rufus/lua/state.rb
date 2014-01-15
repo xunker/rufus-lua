@@ -93,11 +93,11 @@ module Rufus::Lua
 
     # This method holds the 'eval' mechanism.
     #
-    def loadstring_and_call (s)
+    def loadstring_and_call (s, chunk_name)
 
       bottom = stack_top
 
-      err = Lib.luaL_loadbuffer(@pointer, s, Lib.strlen(s), 'line')
+      err = Lib.luaL_loadbuffer(@pointer, s, Lib.strlen(s), (chunk_name || 'line').to_s)
       raise_if_error('eval:compile', err)
 
       pcall(bottom, 0) # arg_count is set to 0
@@ -406,9 +406,9 @@ module Rufus::Lua
 
     # Evaluates a piece (string) of Lua code within the state.
     #
-    def eval (s)
+    def eval (s, chunk_name=nil)
 
-      loadstring_and_call(s)
+      loadstring_and_call(s, chunk_name)
     end
 
     # Returns a value set at the 'global' level in the state.
